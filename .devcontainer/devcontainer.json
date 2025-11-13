@@ -1,0 +1,45 @@
+{
+    "name": "Development Container with Docker-in-Docker",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest",
+            "moby": true,
+            "dockerDashComposeVersion": "v2"
+        }
+    },
+    "runArgs": [
+        "--init",
+        "--privileged"
+    ],
+    "mounts": [
+        {
+            "source": "dind-var-lib-docker",
+            "target": "/var/lib/docker",
+            "type": "volume"
+        }
+    ],
+    "overrideCommand": false,
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode-remote.remote-containers",
+                "ms-azuretools.vscode-docker"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
+        }
+    },
+    "forwardPorts": [2375],
+    "portsAttributes": {
+        "2375": {
+            "label": "Docker Daemon"
+        }
+    },
+    "postCreateCommand": "docker --version && docker-compose --version",
+    "remoteUser": "vscode"
+}
